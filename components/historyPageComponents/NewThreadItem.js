@@ -17,12 +17,11 @@ import { useCustomSelector } from "@/customHooks/customSelector";
 import {
   allowedAttributes,
   extractErrorMessage,
-  formatCostValue,
-  formatTokensTable,
+  getIconOfService,
+  omitHiddenVariables,
   openModal,
   parseNestedJson,
 } from "@/utils/utility";
-import CodeBlock from "../codeBlock/CodeBlock";
 import { MODAL_TYPE } from "@/utils/enums";
 import { flattenToolsCallData } from "@/utils/executionTraceTransform";
 import { rerunApi } from "@/config/modelApi";
@@ -31,6 +30,7 @@ import { getAgentAnalyticsAction } from "@/store/action/analyticsAction";
 import { isWordFileUrl } from "@/utils/attachmentUtils";
 import { PdfIcon } from "@/icons/pdfIcon";
 import GoogleDocIcon from "@/icons/GoogleDocIcon";
+import CodeBlock from "../codeBlock/CodeBlock";
 
 const numberOrNull = (value) => (typeof value === "number" && !Number.isNaN(value) ? value : null);
 
@@ -274,13 +274,25 @@ const NewThreadItem = ({
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const { embedToken, orgBridges, publishedVersionId, allBridgesMap, isEmbedUser } = useCustomSelector((state) => ({
-    embedToken: state?.bridgeReducer?.org?.[params?.org_id]?.embed_token,
-    orgBridges: state?.bridgeReducer?.org?.[params?.org_id]?.orgs || [],
-    publishedVersionId: state?.bridgeReducer?.allBridgesMap?.[item?.bridge_id]?.published_version_id,
-    allBridgesMap: state?.bridgeReducer?.allBridgesMap || {},
-    isEmbedUser: state?.appInfoReducer?.embedUserDetails?.isEmbedUser,
-  }));
+  const { embedToken, orgBridges, publishedVersionId, isEmbedUser, showTestcases, bridgeVersions } = useCustomSelector(
+    (state) => ({
+      embedToken: state?.bridgeReducer?.org?.[params?.org_id]?.embed_token,
+      orgBridges: state?.bridgeReducer?.org?.[params?.org_id]?.orgs || [],
+      publishedVersionId: state?.bridgeReducer?.allBridgesMap?.[item?.bridge_id]?.published_version_id,
+      isEmbedUser: state?.appInfoReducer?.embedUserDetails?.isEmbedUser,
+      showTestcases: state?.appInfoReducer?.embedUserDetails?.showTestcases !== false,
+      bridgeVersions: state?.bridgeReducer?.allBridgesMap?.[item?.bridge_id]?.versions || [],
+    })
+  );
+
+  // Embed users only see the test case action when the embed config enables it
+  const canAddTestCase = !isEmbedUser || (isEmbedUser && showTestcases);
+
+  // Versions are surfaced as their position (1, 2, ...) rather than the raw mongo id
+  const versionNumber = useMemo(() => {
+    const versionIndex = bridgeVersions.indexOf(item?.version_id);
+    return versionIndex >= 0 ? versionIndex + 1 : null;
+  }, [bridgeVersions, item?.version_id]);
 
   const toolsDataModalRef = useRef(null);
   const [toolsData, setToolsData] = useState([]);
@@ -296,7 +308,7 @@ const NewThreadItem = ({
   const userText = item?.user || "";
   const assistantText = isError ? extractErrorMessage(item?.error) : getAssistantText(item);
   const systemPrompt = item?.prompt || (item?.user ? thread?.[index + 1]?.prompt : "") || "";
-  const variables = item?.variables && typeof item.variables === "object" ? item.variables : {};
+  const variables = omitHiddenVariables(item?.variables && typeof item.variables === "object" ? item.variables : {});
   const variableCount = Object.keys(variables).length;
 
   const memoryContent = useMemo(() => extractMemoryFromAiConfigInput(item?.AiConfig), [item?.AiConfig]);
@@ -645,19 +657,21 @@ const NewThreadItem = ({
         <ThreadActionPill icon={CopyIcon} onClick={() => handleCopy(userText)}>
           Copy
         </ThreadActionPill>
-        <ThreadActionPill
-          icon={SlidersHorizontal}
-          trailing={Maximize2}
-          onClick={() => handleUserButtonClick("AiConfig")}
-        >
-          AI Config
-        </ThreadActionPill>
+        {!isEmbedUser ? (
+          <ThreadActionPill
+            icon={SlidersHorizontal}
+            trailing={Maximize2}
+            onClick={() => handleUserButtonClick("AiConfig")}
+          >
+            AI Config
+          </ThreadActionPill>
+        ) : null}
         {memoryContent ? (
           <ThreadActionPill icon={Brain} trailing={Maximize2} onClick={() => handleUserButtonClick("Memory")}>
             Memory
           </ThreadActionPill>
         ) : null}
-        {item?.latency ? (
+        {!isEmbedUser && item?.latency ? (
           <ThreadActionPill icon={Clock3} trailing={Maximize2} onClick={() => handleUserButtonClick("Latency")}>
             Latency
           </ThreadActionPill>
@@ -755,7 +769,15 @@ const NewThreadItem = ({
             {latency}s
           </span>
         ) : null}
-        {item?.model ? <span>{item.model}</span> : null}
+        {item?.service ? (
+          <span className="inline-flex items-center">{getIconOfService(item.service, 12, 12)}</span>
+        ) : null}
+        {item?.model ? <span className="max-w-[180px] truncate">{item.model}</span> : null}
+        {versionNumber ? (
+          <span className="rounded-md bg-blue-50 px-1.5 py-0.5 font-medium text-blue-600 dark:bg-blue-400/15 dark:text-blue-300">
+            V{versionNumber}
+          </span>
+        ) : null}
         {totalTokens !== null ? <span>{totalTokens} tok</span> : null}
         {/* Cost intentionally omitted here — it is already shown in the Cost column of this row. */}
       </div>
@@ -765,14 +787,14 @@ const NewThreadItem = ({
           icon={RotateCcw}
           onClick={handleRerun}
           disabled={isRerunning || !publishedVersionId}
-          title={!publishedVersionId ? "No published version available" : "Rerun this message"}
+          title={!publishedVersionId ? "No published version available" : "Rerun this message with published version"}
         >
           {isRerunning ? "Running..." : "Rerun"}
         </ThreadActionPill>
         <ThreadActionPill icon={CopyIcon} onClick={() => handleCopy(assistantText)}>
           Copy
         </ThreadActionPill>
-        {!isError && !item?.llm_urls?.length ? (
+        {canAddTestCase && !isError && !item?.llm_urls?.length ? (
           <ThreadActionPill icon={AddIcon} trailing={ChevronRight} onClick={() => handleAddTestCase(item, index)}>
             Test Case
           </ThreadActionPill>
@@ -780,7 +802,7 @@ const NewThreadItem = ({
         <ThreadActionPill icon={BotMessageIcon} trailing={ChevronRight} onClick={handleAskAi}>
           Debug Agent
         </ThreadActionPill>
-        {!isError && !item?.llm_urls?.length && !item?.fromRTLayer ? (
+        {!isEmbedUser && !isError && !item?.llm_urls?.length && !item?.fromRTLayer ? (
           <ThreadActionPill icon={PencilIcon} onClick={handleEdit}>
             Edit
           </ThreadActionPill>

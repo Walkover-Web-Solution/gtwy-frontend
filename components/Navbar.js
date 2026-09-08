@@ -165,6 +165,9 @@ const Navbar = ({ isEmbedUser, params }) => {
         shortLabel: "History",
         shortcut: "G H",
       });
+    }
+    // Analytics is never exposed to embed users, even when history is enabled
+    if (!isEmbedUser) {
       baseTabs.push({
         id: "analytics",
         label: "Analytics",
@@ -482,7 +485,9 @@ const Navbar = ({ isEmbedUser, params }) => {
           if (timeoutId) clearTimeout(timeoutId);
         } else if (e.key === "a" || e.key === "A") {
           e.preventDefault();
-          handleTabChange("analytics");
+          if (!isEmbedUser) {
+            handleTabChange("analytics");
+          }
           gPressed = false;
           if (timeoutId) clearTimeout(timeoutId);
         }

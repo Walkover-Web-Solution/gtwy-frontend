@@ -1520,10 +1520,10 @@ function Chat({ params, userMessage, isOrchestralModel = false, searchParams, is
                                     </button>
                                   )}
 
-                                  {/* Message Metrics (Tokens, Cost, Latency) */}
-                                  {(message.usage || message.latency) && (
+                                  {/* Message Metrics (Tokens, Cost, Latency) — usage is hidden from embed users */}
+                                  {((!isEmbedUser && message.usage) || message.latency) && (
                                     <div className="see-on-hover transition-opacity duration-200 inline-flex flex-wrap items-center gap-1.5 text-[10px] text-base-content/60 font-medium select-none">
-                                      {message.usage?.cost > 0 && (
+                                      {!isEmbedUser && message.usage?.cost > 0 && (
                                         <span
                                           className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-base-200 border border-base-content/15 shadow-sm"
                                           title="Estimated cost"
@@ -1548,7 +1548,7 @@ function Chat({ params, userMessage, isOrchestralModel = false, searchParams, is
                                           )}
                                         </span>
                                       )}
-                                      {message.usage?.total_tokens > 0 && (
+                                      {!isEmbedUser && message.usage?.total_tokens > 0 && (
                                         <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-base-200 border border-base-content/15 shadow-sm">
                                           <span className="font-semibold text-base-content/70">Tokens:</span>
                                           <span className="text-base-content/90">

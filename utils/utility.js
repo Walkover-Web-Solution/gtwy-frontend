@@ -423,6 +423,12 @@ export function closeModal(modalName) {
   }
 }
 
+// Variables the platform injects at runtime — hidden from user-facing variable lists
+export const HIDDEN_VARIABLE_KEYS = ["_user_message", "current_time_date_and_current_identifier", "pre_function"];
+
+export const omitHiddenVariables = (variables) =>
+  Object.fromEntries(Object.entries(variables || {}).filter(([key]) => !HIDDEN_VARIABLE_KEYS.includes(key)));
+
 export const allowedAttributes = {
   important: [["latency", "Latency"]],
   optional: [

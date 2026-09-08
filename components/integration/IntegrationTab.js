@@ -13,7 +13,11 @@ const IntegrationTab = ({ data }) => {
   const jwtPayload = `{
   "org_id": "${data?.org_id}",
   "folder_id": "${data?.folder_id}",
-  "user_id": "Your_user_id"
+  "unique_identifier": "Your_unique_identifier",
+  "meta": {
+    "name": "Your_user_name",
+    "email": "Your_user_email"
+  }
 }`;
 
   const integrationScript = `<script

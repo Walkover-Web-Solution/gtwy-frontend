@@ -872,7 +872,7 @@ const NewThreadItem = ({
           {isError ? (
             <div className="whitespace-pre-wrap break-words text-red-600 dark:text-red-300">{assistantText}</div>
           ) : (
-            <FinalResponseCard content={assistantText} hasToolCalls={false} />
+            <FinalResponseCard content={assistantText} hasToolCalls={false} annotations={item?.annotations} />
           )}
         </EventRow>
       )}

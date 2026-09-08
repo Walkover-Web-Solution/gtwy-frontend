@@ -1837,6 +1837,7 @@ const ThreadItem = ({
                     content={getMessageToDisplay()}
                     isHtml={isChatbotMessage() && isRawHtml(getMessageToDisplay())}
                     hasToolCalls={hasAgentsOrTools}
+                    annotations={item?.annotations}
                   />
 
                   {/* Action buttons and badges below FinalResponseCard */}

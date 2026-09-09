@@ -274,16 +274,16 @@ const NewThreadItem = ({
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const { embedToken, orgBridges, publishedVersionId, isEmbedUser, showTestcases, bridgeVersions } = useCustomSelector(
-    (state) => ({
+  const { embedToken, orgBridges, publishedVersionId, isEmbedUser, showTestcases, bridgeVersions, allBridgesMap } =
+    useCustomSelector((state) => ({
       embedToken: state?.bridgeReducer?.org?.[params?.org_id]?.embed_token,
+      allBridgesMap: state?.bridgeReducer?.allBridgesMap || {},
       orgBridges: state?.bridgeReducer?.org?.[params?.org_id]?.orgs || [],
       publishedVersionId: state?.bridgeReducer?.allBridgesMap?.[item?.bridge_id]?.published_version_id,
       isEmbedUser: state?.appInfoReducer?.embedUserDetails?.isEmbedUser,
       showTestcases: state?.appInfoReducer?.embedUserDetails?.showTestcases !== false,
       bridgeVersions: state?.bridgeReducer?.allBridgesMap?.[item?.bridge_id]?.versions || [],
-    })
-  );
+    }));
 
   // Embed users only see the test case action when the embed config enables it
   const canAddTestCase = !isEmbedUser || (isEmbedUser && showTestcases);

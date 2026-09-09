@@ -365,7 +365,10 @@ const ConnectedAgentList = ({ params, searchParams, isPublished, isEditor = true
                     disabled={!shouldToolsShow || isReadOnly}
                     onClick={() => {
                       setTimeout(() => {
-                        document.getElementById("connect-agent-suggestion-search-input")?.focus();
+                        (
+                          document.getElementById("connect-agent-suggestion-search-input") ||
+                          document.getElementById("connect-agent-suggestion-dropdown")
+                        )?.focus();
                       }, 50);
                     }}
                   >
@@ -403,7 +406,10 @@ const ConnectedAgentList = ({ params, searchParams, isPublished, isEditor = true
                         disabled={isReadOnly}
                         onClick={() => {
                           setTimeout(() => {
-                            document.getElementById("connect-agent-suggestion-search-input")?.focus();
+                            (
+                              document.getElementById("connect-agent-suggestion-search-input") ||
+                              document.getElementById("connect-agent-suggestion-dropdown")
+                            )?.focus();
                           }, 50);
                         }}
                       >

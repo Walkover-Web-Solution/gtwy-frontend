@@ -1,5 +1,6 @@
 import { modelSuggestionApi } from "@/config/index";
 import { useCustomSelector } from "@/customHooks/customSelector";
+import { SparklesIcon } from "@/components/Icons";
 import React, { useState, useCallback } from "react";
 
 const RecommendedModal = ({
@@ -94,10 +95,11 @@ const RecommendedModal = ({
             <button
               data-testid="get-recommended-model-button"
               id="get-recommended-model-button"
-              className="flex items-center gap-2  rounded-md bg-gradient-to-r from-blue-800 to-orange-600 text-sm text-transparent bg-clip-text hover:opacity-80 transition-opacity"
+              className="btn btn-sm btn-ghost gap-2 text-primary hover:bg-primary/10 disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={handleGetRecommendations}
               disabled={isLoadingRecommendations || isPublished || !isEditor}
             >
+              <SparklesIcon className="h-4 w-4" />
               {isLoadingRecommendations ? "Loading..." : "Get Recommended Model"}
             </button>
 

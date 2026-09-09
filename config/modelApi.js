@@ -129,6 +129,23 @@ export const dryRun = async ({ localDataToSend, bridge_id }) => {
     }
     return { success: true, data: dryRun.data };
   } catch (error) {
+    if (error?.response?.data && typeof error.response.data.getReader === "function") {
+      try {
+        const reader = error.response.data.getReader();
+        const decoder = new TextDecoder();
+        let raw = "";
+        // eslint-disable-next-line no-constant-condition
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          raw += decoder.decode(value, { stream: true });
+        }
+        error.response.data = JSON.parse(raw);
+      } catch (streamReadError) {
+        console.error("Failed to read/parse streamed error body", streamReadError);
+      }
+    }
+
     console.error("dry run error", error, error?.response?.data?.error);
 
     if (error?.response?.status === 403) {

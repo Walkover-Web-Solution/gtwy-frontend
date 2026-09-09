@@ -18,13 +18,13 @@ const IntegrationTab = ({ data }) => {
 
   const integrationScript = `<script
   id="gtwy-main-script"
-  embedToken="${embedToken || "Add your embed token here"}"
+  embed_token="${embedToken || "Add your embed token here"}"
   src="${
     process.env.NEXT_PUBLIC_ENV !== "PROD"
       ? `${process.env.NEXT_PUBLIC_FRONTEND_URL}/gtwy_dev.js`
       : `${process.env.NEXT_PUBLIC_FRONTEND_URL}/gtwy.js`
   }"
-  parentId="Your_parent_id"
+  parent_id="Your_parent_id"
   agent_id="Your_agent_id"
   agent_name="Your_agent_name"
 ></script>`;
@@ -54,7 +54,8 @@ window.addEventListener('message', (event) => {
 -H 'Authorization: your_embed_token'`;
 
   const tableData = [
-    ["parentId", "To open GTWY in a specific container"],
+    ["embed_token", "Your signed embed token"],
+    ["parent_id", "To open GTWY in a specific container"],
     ["agent_id", "To open agent in a specific agent"],
     ["agent_name", "To create an agent with a specific name, or redirect if the agent already exists."],
   ];
@@ -130,6 +131,11 @@ window.addEventListener('message', (event) => {
               </tbody>
             </table>
           </div>
+          <p className="text-sm text-base-content/70 mt-4">
+            Note: Script keys use <span className="font-mono">snake_case</span>. The older camelCase spellings (
+            <span className="font-mono">embedToken</span>, <span className="font-mono">parentId</span>) are still
+            accepted, so existing embeds keep working.
+          </p>
         </div>
       </div>
 

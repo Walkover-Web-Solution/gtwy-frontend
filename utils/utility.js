@@ -1311,8 +1311,8 @@ export const formatTokensTable = (tokensObj) => {
   const costObj = tokensObj.cost || {};
   const categories = TOKEN_CATEGORIES;
   const rows = [];
-  const processedTokenKeys = new Set(["cost", "expected_cost"]);
-  const processedCostKeys = new Set();
+  const processedTokenKeys = new Set(["cost", "expected_cost", "total_tokens"]);
+  const processedCostKeys = new Set(["total_cost"]);
 
   categories.forEach((cat) => {
     let tokenVal = undefined;

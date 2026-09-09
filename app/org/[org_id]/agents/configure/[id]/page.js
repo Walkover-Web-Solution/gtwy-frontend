@@ -13,7 +13,6 @@ import { MODAL_TYPE } from "@/utils/enums";
 import ConfirmationModal from "@/components/UI/ConfirmationModal";
 import { useRouter } from "next/navigation";
 import { useQueryParams } from "@/customHooks/useQueryParams";
-import AgentSetupGuide from "@/components/AgentSetupGuide";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { RefreshIcon } from "@/components/Icons";
 import { CircleAlert } from "lucide-react";
@@ -142,6 +141,8 @@ const Page = ({ params, searchParams, isEmbedUser }) => {
     isNotesCollapsed: false,
   }));
 
+  // setIsGuideVisible is wired to AgentSetupGuide, temporarily commented out below.
+  // eslint-disable-next-line unused-imports/no-unused-vars
   const [isGuideVisible, setIsGuideVisible] = useState(false);
   const [apiKeyError, setApiKeyError] = useState(false);
 
@@ -365,14 +366,17 @@ const Page = ({ params, searchParams, isEmbedUser }) => {
     }
   }, [uiState.isConfigCollapsed, uiState.isPromptHelperCollapsed, uiState.isPromptHelperOpen]);
 
+  // eslint-disable-next-line unused-imports/no-unused-vars
   const handleSwitchToModelTab = useCallback(() => {
     setParam("tab", "model");
   }, [setParam]);
 
+  // eslint-disable-next-line unused-imports/no-unused-vars
   const handleSwitchToPromptTab = useCallback(() => {
     setParam("tab", "prompt");
   }, [setParam]);
 
+  // eslint-disable-next-line unused-imports/no-unused-vars
   const handleSwitchToConnectorsTab = useCallback(() => {
     setParam("tab", "connectors");
   }, [setParam]);
@@ -790,7 +794,8 @@ const Page = ({ params, searchParams, isEmbedUser }) => {
                         className={`flex-1 overflow-x-hidden ${isGuideVisible ? "overflow-y-hidden" : "overflow-y-auto"}`}
                       >
                         <div id="chat-container" className="h-full flex flex-col">
-                          <AgentSetupGuide
+                          {/* eslint-disable-next-line no-commented-code/no-commented-code -- AgentSetupGuide temporarily disabled, kept for quick re-enable */}
+                          {/* <AgentSetupGuide
                             id="agent-setup-guide"
                             promptTextAreaRef={promptTextAreaRef}
                             apiKeySectionRef={apiKeySectionRef}
@@ -802,7 +807,7 @@ const Page = ({ params, searchParams, isEmbedUser }) => {
                             onSwitchToPromptTab={handleSwitchToPromptTab}
                             onSwitchToConnectorsTab={handleSwitchToConnectorsTab}
                             setApiKeyError={setApiKeyError}
-                          />
+                          /> */}
                           {!isGuideVisible && (
                             <>
                               {!sessionStorage.getItem("orchestralUser") ? (
@@ -1018,7 +1023,8 @@ const Page = ({ params, searchParams, isEmbedUser }) => {
           {(!isEmbedUser || (isEmbedUser && showPlayground)) && (
             <div id="parentChatbot" className="h-[100dvh] flex flex-col">
               <div id="mobile-chat-container" className="flex-1 min-h-0 flex flex-col">
-                <AgentSetupGuide
+                {/* eslint-disable-next-line no-commented-code/no-commented-code -- AgentSetupGuide temporarily disabled, kept for quick re-enable */}
+                {/* <AgentSetupGuide
                   id="mobile-agent-setup-guide"
                   promptTextAreaRef={promptTextAreaRef}
                   apiKeySectionRef={apiKeySectionRef}
@@ -1030,9 +1036,9 @@ const Page = ({ params, searchParams, isEmbedUser }) => {
                   onSwitchToPromptTab={handleSwitchToPromptTab}
                   onSwitchToConnectorsTab={handleSwitchToConnectorsTab}
                   setApiKeyError={setApiKeyError}
-                />
+                /> */}
 
-                {!isGuideVisible && (
+                {isGuideVisible && (
                   <>
                     {!sessionStorage.getItem("orchestralUser") ? (
                       <div id="mobile-chat-content-container" className="flex-1 min-h-0">

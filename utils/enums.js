@@ -315,7 +315,7 @@ export const HISTORY_FILTER_BY_FIELDS = {
 
 export const EMBED_OBJECT_KEYS = new Set(["theme_config", "prompt", "models", "apikey_object_id", "tools_id"]);
 export const EMBED_ARRAY_KEYS = new Set(["tools_id"]);
-export const EMBED_PASSTHROUGH_KEYS = new Set(["themeMode", "slide"]);
+export const EMBED_PASSTHROUGH_KEYS = new Set(["themeMode", "slide", "layout"]);
 export const EMBED_SKIP_KEYS = new Set([
   "agent_name",
   "agent_id",

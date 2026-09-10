@@ -188,6 +188,20 @@ const CONFIG_SCHEMA = [
     section: "Display Settings",
   },
   {
+    key: "layout",
+    type: "select",
+    label: "Config Panel Layout",
+    description: "Choose how the Prompt/Model/Connectors/Memory/Settings panel is arranged for embed users",
+    defaultValue: "tabs",
+    options: [
+      { value: "tabs", label: "Tabs" },
+      { value: "single", label: "Single Page" },
+      { value: "accordion", label: "Accordion" },
+      { value: "stepper", label: "Guided Steps" },
+    ],
+    section: "Display Settings",
+  },
+  {
     key: "themeMode",
     type: "select",
     label: "Theme Mode",

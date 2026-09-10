@@ -353,14 +353,6 @@ function AddTestCaseModal({ testCaseConversation, setTestCaseConversation, chann
             </div>
           )}
 
-          {/* Mock Tool Responses Section */}
-          <MockToolResponsesSection
-            ref={mockToolResponsesRef}
-            tools={bridgeToolOptions}
-            initialValue={initialToolsResponseFromHistory}
-            resetKey={testCaseConversation}
-          />
-
           {/* User URLs Section */}
           {userUrlsList.length > 0 && (
             <div className="space-y-3 bg-base-50 rounded-lg p-4 border border-base-200">
@@ -479,6 +471,14 @@ function AddTestCaseModal({ testCaseConversation, setTestCaseConversation, chann
               )}
             </div>
           )}
+
+          {/* Preset Tool Response */}
+          <MockToolResponsesSection
+            ref={mockToolResponsesRef}
+            tools={bridgeToolOptions}
+            initialValue={initialToolsResponseFromHistory}
+            resetKey={testCaseConversation}
+          />
 
           {/* User Query - From user field (always visible) */}
           {userQueryText && (

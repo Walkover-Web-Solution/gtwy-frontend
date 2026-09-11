@@ -461,6 +461,7 @@ export const GetPreBuiltToolTypeIcon = (preBuiltTools, height = 24, width = 24) 
     case "image_generation":
       return <Image height={height} width={width} alt="image generation icon" />;
     case "Gtwy_Web_Search":
+    case "Gtwy_Browser":
       return <FavIconSVG height={height} width={width} />;
     default:
       return null;

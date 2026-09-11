@@ -158,7 +158,7 @@ function EmbedListSuggestionDropdownMenu({
       (t) =>
         !selected.has(t.value) &&
         t?.name?.toLowerCase()?.includes(normalizedSearchQuery) &&
-        showInbuiltTools?.[t?.value]
+        (t?.isGtwyTool || showInbuiltTools?.[t?.value])
     );
   }, [prebuiltToolsData, toolsVersionData, normalizedSearchQuery, showInbuiltTools]);
 

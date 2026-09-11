@@ -238,7 +238,7 @@ const Dropdown = ({
 
       <div
         ref={menuRef}
-        className={cx("dropdown-content z-[60] w-full hover:bg-base-200", menuClassName)}
+        className={cx("dropdown-content z-[60] hover:bg-base-200", fullWidth ? "w-full" : "", menuClassName)}
         role="listbox"
       >
         <div className="bg-base-100 rounded-box shadow-xl border border-base-content/20 w-full overflow-hidden">

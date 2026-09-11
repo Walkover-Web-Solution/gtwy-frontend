@@ -140,6 +140,7 @@ const ModelDropdown = ({
   isEditor = true,
   isEmbedUser = false,
   showAdvancedConfigurations = false,
+  apiKeyActionButton = null,
 }) => {
   // Determine if content is read-only (either published or user is not an editor)
   const isReadOnly = isPublished || !isEditor;
@@ -444,6 +445,7 @@ const ModelDropdown = ({
               />
             )}
           </div>
+          {apiKeyActionButton}
           {showFallbackModelHint && (
             <InfoTooltip
               tooltipContent={

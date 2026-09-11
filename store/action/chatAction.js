@@ -29,6 +29,7 @@ import {
   setFallbackData,
 } from "../reducer/chatReducer";
 import { haveSameItems, buildUserUrls, buildLlmUrls, extractImageUrlsFromResponse } from "@/utils/attachmentUtils";
+import { getErrorMessage } from "@/utils/errorHandler";
 
 const getVideoIdentifier = (video) => {
   if (!video) return null;
@@ -403,7 +404,7 @@ export const sendMessageWithRtLayer =
         dispatch(removeMessage({ channelId, messageId: loadingMessage.id }));
       }
 
-      dispatch(setChatError(channelId, error.message || "Something went wrong. Please try again."));
+      dispatch(setChatError(channelId, getErrorMessage(error)));
       dispatch(setChatLoading(channelId, false)); // Clear loading on error
       throw error;
     }
@@ -670,7 +671,7 @@ export const sendMessageWithApiStreaming =
       }
       if (userMessage) dispatch(removeMessage({ channelId, messageId: userMessage.id }));
       if (loadingMessage) dispatch(removeMessage({ channelId, messageId: loadingMessage.id }));
-      dispatch(setChatError(channelId, error.message || "Something went wrong. Please try again."));
+      dispatch(setChatError(channelId, getErrorMessage(error)));
       dispatch(setChatLoading(channelId, false));
       throw error;
     }

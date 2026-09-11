@@ -226,7 +226,9 @@ const Layout = ({ children, isEmbedUser }) => {
             messageData.replaceMeta != null
               ? messageData.replaceMeta
               : { ...(bridge?.meta || {}), ...messageData.meta };
-          dispatch(updateBridgeAction({ dataToSend: { meta: updatedMeta }, bridgeId: messageData.agent_id }));
+          dispatch(updateBridgeAction({ dataToSend: { meta: updatedMeta }, bridgeId: messageData.agent_id })).catch(
+            (error) => console.error("Failed to sync agent meta:", error)
+          );
         }
         setIsLoading(true);
         const bridgeData = bridges.find((b) => b._id === messageData.agent_id);

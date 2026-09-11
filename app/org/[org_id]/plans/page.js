@@ -127,7 +127,6 @@ export default function PlansPage() {
                   <p className="font-semibold">{p.display_name}</p>
                   {isCurrent && <span className="badge badge-primary badge-sm">Current</span>}
                 </div>
-                <p className="text-sm text-gray-500">{Number(p.credit_grant ?? 0).toLocaleString()} credits granted</p>
               </div>
             );
           })}

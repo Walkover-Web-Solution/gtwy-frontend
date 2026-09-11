@@ -154,12 +154,13 @@ export const dryRun = async ({ localDataToSend, bridge_id }) => {
       throw new Error(blockedMessage);
     }
 
-    const detail = error.response;
+    const responseData = error?.response?.data;
+    const detailMessage =
+      typeof responseData?.detail === "string"
+        ? responseData.detail
+        : responseData?.detail?.error || responseData?.detail?.message;
     const errorMessage =
-      error?.response?.data?.error ||
-      (typeof detail === "string" ? detail : detail?.error) ||
-      error?.message ||
-      "Something went wrong.";
+      responseData?.message || detailMessage || responseData?.error || error?.message || "Something went wrong.";
 
     const hasBothErrors = errorMessage.includes("Initial Error:") && errorMessage.includes("Fallback Error:");
 

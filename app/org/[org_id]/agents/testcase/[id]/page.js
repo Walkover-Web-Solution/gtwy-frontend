@@ -14,6 +14,7 @@ import {
   updateTestCaseAction,
 } from "@/store/action/testCasesAction";
 import { updateBridgeAction } from "@/store/action/bridgeAction";
+import { getErrorMessage } from "@/utils/errorHandler";
 import { setTestCaseConfig } from "@/store/reducer/testCaseConfigReducer";
 import { PlayIcon } from "@/components/Icons";
 import {
@@ -774,7 +775,9 @@ function TestCases({ params }) {
                         bridgeId: resolvedParams?.id,
                         dataToSend: { agent_info: { ai_matching_custom_prompt: prompt } },
                       })
-                    );
+                    ).catch((error) => {
+                      toast.error(getErrorMessage(error) || "Failed to save custom prompt");
+                    });
                   }}
                   onCustomPromptClear={() => {
                     setGlobalCustomPrompt("");
@@ -785,7 +788,9 @@ function TestCases({ params }) {
                         bridgeId: resolvedParams?.id,
                         dataToSend: { agent_info: { ai_matching_custom_prompt: "" } },
                       })
-                    );
+                    ).catch((error) => {
+                      toast.error(getErrorMessage(error) || "Failed to clear custom prompt");
+                    });
                   }}
                   label="Matching"
                 />

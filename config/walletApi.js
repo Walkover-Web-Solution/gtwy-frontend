@@ -13,7 +13,7 @@ export const getWalletBalance = async () => {
 };
 export const getMyPlan = async () => {
   try {
-    const { data } = await axios.get(`${URL}/api/lago/plan/me`);
+    const { data } = await axios.get(`${URL}/api/lago/plan/org/me`);
     return data;
   } catch (error) {
     console.error("getMyPlan failed:", error);
@@ -23,7 +23,7 @@ export const getMyPlan = async () => {
 
 export const getPlans = async () => {
   try {
-    const { data } = await axios.get(`${URL}/api/billing-plans/public`);
+    const { data } = await axios.get(`${URL}/api/billing-plans/org/public`);
     return data;
   } catch (error) {
     console.error("getPlans failed:", error);

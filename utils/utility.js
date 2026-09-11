@@ -285,6 +285,12 @@ export const closeSidebar = (sidebarId, direction = "left") => {
   }
 };
 
+export const isServiceAllowedByPlan = (service, planServices) => {
+  if (!planServices || planServices === "*") return true;
+  if (typeof planServices !== "object") return true;
+  return Object.prototype.hasOwnProperty.call(planServices, service);
+};
+
 export const getIconOfService = (service, height, width) => {
   switch (service) {
     case "openai":

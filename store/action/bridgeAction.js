@@ -748,6 +748,7 @@ export const updateBridgeVersionAction =
         }
         // Update status to show warning
         dispatch(setSavingStatus({ status: "failed" }));
+        toast.error(data?.message || data?.error || "Failed to update version");
 
         // Clear the status after 3 seconds
         setTimeout(() => {
@@ -758,23 +759,21 @@ export const updateBridgeVersionAction =
     } catch (error) {
       console.error(error);
 
-      if (versionId) {
-        let parentBridgeId = bridgeId;
-        if (!parentBridgeId) {
-          const state = getState().bridgeReducer;
-          for (const bId in state.bridgeVersionMapping) {
-            if (state.bridgeVersionMapping[bId][versionId]) {
-              parentBridgeId = bId;
-              break;
-            }
+      let parentBridgeId = bridgeId;
+      if (versionId && !parentBridgeId) {
+        const state = getState().bridgeReducer;
+        for (const bId in state.bridgeVersionMapping) {
+          if (state.bridgeVersionMapping[bId][versionId]) {
+            parentBridgeId = bId;
+            break;
           }
         }
-
-        if (parentBridgeId && !skipRollback) {
-          dispatch(bridgeVersionRollBackReducer({ bridgeId: parentBridgeId, versionId }));
-          toast.error(error?.response?.data?.message || "Failed to update version. Changes have been reverted.");
-        }
       }
+
+      if (versionId && parentBridgeId && !skipRollback) {
+        dispatch(bridgeVersionRollBackReducer({ bridgeId: parentBridgeId, versionId }));
+      }
+      toast.error(error?.response?.data?.message || "Failed to update version. Changes have been reverted.");
 
       dispatch(isError());
       // Show error status
@@ -848,10 +847,13 @@ export const publishBridgeVersionAction =
       if (data?.success) {
         dispatch(publishBrigeVersionReducer({ versionId: data?.version_id, bridgeId, orgId }));
         toast.success("Agent Version published successfully");
+      } else {
+        toast.error(data?.message || data?.error || "Failed to publish agent version");
       }
       return data;
     } catch (error) {
       console.error(error);
+      toast.error(error?.response?.data?.message || error?.response?.data?.error || "Failed to publish agent version");
     }
   };
 
@@ -940,6 +942,7 @@ export const genrateSummaryAction =
       return response;
     } catch (error) {
       dispatch(isError());
+      toast.error(error?.response?.data?.message || error?.response?.data?.error || "Failed to generate summary");
       console.error("Failed to update summary: ", error);
     }
   };

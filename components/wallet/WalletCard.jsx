@@ -104,7 +104,9 @@ export default function WalletCard({ orgId }) {
             </p>
           )}
 
-          {consumed > 0 && <WalletMeter percentRemaining={percentRemaining} credits={credits} total={referenceTotal} />}
+          {referenceTotal > 0 && (
+            <WalletMeter percentRemaining={percentRemaining} credits={credits} total={referenceTotal} />
+          )}
 
           <dl className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-base-content/50">
             <div className="flex items-center gap-1.5">

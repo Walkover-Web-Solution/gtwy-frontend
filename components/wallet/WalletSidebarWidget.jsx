@@ -64,7 +64,7 @@ export default function WalletSidebarWidget({ orgId, showLabel = true }) {
           </div>
         )}
       </div>
-      {showLabel && consumed > 0 && (
+      {showLabel && referenceTotal > 0 && (
         <div className="h-1 w-full overflow-hidden rounded-full bg-base-300">
           <div className="h-full rounded-full bg-primary" style={{ width: `${percentRemaining}%` }} />
         </div>

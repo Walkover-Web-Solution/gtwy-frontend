@@ -26,6 +26,7 @@ import { updateBridgeVersionReducer } from "@/store/reducer/bridgeReducer";
 import { MODAL_TYPE } from "@/utils/enums";
 import { openModal, closeModal, toggleSidebar, sendDataToParent } from "@/utils/utility";
 import { toast } from "react-toastify";
+import { getErrorMessage } from "@/utils/errorHandler";
 const ChatBotSlider = dynamic(() => import("./sliders/ChatBotSlider"), { ssr: false });
 const ConfigHistorySlider = dynamic(() => import("./sliders/ConfigHistorySlider"), { ssr: false });
 import Protected from "./Protected";
@@ -272,7 +273,9 @@ const Navbar = ({ isEmbedUser, params }) => {
           bridgeId: bridgeId,
           dataToSend: { name: trimmed },
         })
-      );
+      ).catch((error) => {
+        toast.error(getErrorMessage(error) || "Failed to update agent name");
+      });
       isEmbedUser &&
         sendDataToParent(
           "updated",
